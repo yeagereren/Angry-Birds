@@ -9,11 +9,9 @@ import java.util.concurrent.locks.Lock;
 
 public class LosingScreen implements ApplicationListener {
     private Texture LosingImage;
-    private SpriteBatch spriteBatch;
     private Main game;
 
-    LosingScreen(SpriteBatch batch, Main game){
-        spriteBatch = batch;
+    LosingScreen(Main game){
         this.game = game;
         create();
     }
@@ -30,9 +28,9 @@ public class LosingScreen implements ApplicationListener {
 
     @Override
     public void render() {
-        spriteBatch.begin();
-        spriteBatch.draw(LosingImage, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        spriteBatch.end();
+        game.getBatch().begin();
+        game.getBatch().draw(LosingImage, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        game.getBatch().end();
     }
 
     @Override

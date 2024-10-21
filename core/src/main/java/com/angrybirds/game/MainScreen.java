@@ -2,30 +2,31 @@ package com.angrybirds.game;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.TimeUtils;
 
-public class HomeScreen implements ApplicationListener {
+public class MainScreen implements ApplicationListener {
     private Texture homeScreenImage;
     private int ScreenWidth;
     private int ScreenHeight;
     private final Main game;
-    private long startTime;
+    private CustomButton ExitButton, LoadSavedGame, NewGame;
 
 //    private CustomButton playButton;
 //    private CustomButton quitButton;
 //    private Texture logo;
 
-    public HomeScreen(Main game) {
+    public MainScreen(Main game) {
         this.game = game;
         create();
     }
 
     public void create() {
-        homeScreenImage = new Texture("FirstScreen.jpg");
+        homeScreenImage = new Texture("FirstScreenBlurred.jpg");
+        LoadSavedGame = new CustomButton("ExitButton.png", 420, 60, 100, 80);
+        NewGame = new CustomButton("ExitButton.png", 570, 60, 100, 80);
+        ExitButton = new CustomButton("GoBack.png", 70, 650, 60);
 //        logo = new Texture("Logo.jpg");
-        startTime = TimeUtils.nanoTime();
 
         ScreenHeight = Gdx.graphics.getHeight();
         ScreenWidth = Gdx.graphics.getWidth();
@@ -43,15 +44,38 @@ public class HomeScreen implements ApplicationListener {
     public void render() {
         game.getBatch().begin();
         game.getBatch().draw(homeScreenImage, 0, 0, ScreenWidth, ScreenHeight);
+        LoadSavedGame.draw(game.getBatch());
+        NewGame.draw(game.getBatch());
+        ExitButton.draw(game.getBatch());
+        handleInputs();
 //        batch.draw(logo, ((float) ScreenWidth / 2) - 150, ScreenHeight - 200, 350, 175);
 
 //        playButton.draw(batch);
 //        quitButton.draw(batch);
 
 //        handleInput();
-        handleAutoTransition();
 
         game.getBatch().end();
+    }
+
+    private void handleInputs(){
+        if(Gdx.input.justTouched()){
+            float touchX = Gdx.input.getX();
+            float touchY = Gdx.graphics.getHeight() - Gdx.input.getY();
+
+            if (LoadSavedGame.isClicked(touchX, touchY)) {
+//                game.ChangeState(GameStates.HOME_SCREEN);
+                game.ChangeState(GameStates.CHOOSE_LEVEL_SCREEN);
+            }
+
+            if (NewGame.isClicked(touchX, touchY)) {
+                game.ChangeState(GameStates.CHOOSE_LEVEL_SCREEN);
+            }
+
+            if (ExitButton.isClicked(touchX, touchY)) {
+                game.ChangeState(GameStates.GAME_QUIT);
+            }
+        }
     }
 
 //    private void handleInput() {
@@ -80,14 +104,5 @@ public class HomeScreen implements ApplicationListener {
 //        playButton.dispose();
 //        quitButton.dispose();
 //        logo.dispose();
-    }
-
-
-    private void handleAutoTransition() {
-        float elapsedTime = (TimeUtils.nanoTime() - startTime) / 1000000000.0f;  // Convert nanoseconds to seconds
-
-        if (elapsedTime > 3) {
-            game.ChangeState(GameStates.MAIN_SCREEN);
-        }
     }
 }

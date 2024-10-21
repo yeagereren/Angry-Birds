@@ -13,19 +13,27 @@ public class Main extends Game {
     private LosingScreen myLosingScreen;
     private WinningScreen myWinningScreen;
     private Level1Screen myLevel1Screen;
+    private PauseLevelScreen myPauseScreen;
+    private MainScreen myMainScreen;
     private GameStates currentState;
 
 
     @Override
     public void create() {
         batch = new SpriteBatch();
-        myHomeScreen = new HomeScreen(batch, this);
-        myChooseLevelScreen = new ChooseLevelScreen(batch, this);
-        myLosingScreen = new LosingScreen(batch, this);
-        myWinningScreen = new WinningScreen(batch, this);
-        myLevel1Screen = new Level1Screen(batch, this);
+        myHomeScreen = new HomeScreen(this);
+        myChooseLevelScreen = new ChooseLevelScreen(batch,this);
+        myLosingScreen = new LosingScreen(this);
+        myWinningScreen = new WinningScreen(this);
+        myLevel1Screen = new Level1Screen(this);
+        myPauseScreen = new PauseLevelScreen(this);
+        myMainScreen = new MainScreen(this);
 
         currentState = GameStates.HOME_SCREEN;
+    }
+
+    public SpriteBatch getBatch(){
+        return this.batch;
     }
 
     @Override
@@ -50,6 +58,11 @@ public class Main extends Game {
             case LEVEL1SCREEN:
                 myLevel1Screen.render();
                 break;
+            case PAUSE_SCREEN:
+                myPauseScreen.render();
+                break;
+            case MAIN_SCREEN:
+                myMainScreen.render();
         }
     }
 

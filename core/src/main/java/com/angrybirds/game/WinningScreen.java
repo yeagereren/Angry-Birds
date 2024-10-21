@@ -7,11 +7,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class WinningScreen implements ApplicationListener {
     private Texture WinningImage;
-    private SpriteBatch spriteBatch;
-    private Main game;
+    private final Main game;
 
-    WinningScreen(SpriteBatch batch, Main game){
-        spriteBatch = batch;
+    WinningScreen(Main game){
         this.game = game;
         create();
     }
@@ -28,9 +26,9 @@ public class WinningScreen implements ApplicationListener {
 
     @Override
     public void render() {
-        spriteBatch.begin();
-        spriteBatch.draw(WinningImage, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        spriteBatch.end();
+        game.getBatch().begin();
+        game.getBatch().draw(WinningImage, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        game.getBatch().end();
     }
 
     @Override
