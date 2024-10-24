@@ -22,7 +22,7 @@ public class Main extends Game {
     public void create() {
         batch = new SpriteBatch();
         myHomeScreen = new HomeScreen(this);
-        myChooseLevelScreen = new ChooseLevelScreen(batch,this);
+        myChooseLevelScreen = new ChooseLevelScreen(this);
         myLosingScreen = new LosingScreen(this);
         myWinningScreen = new WinningScreen(this);
         myLevel1Screen = new Level1Screen(this);
@@ -68,6 +68,23 @@ public class Main extends Game {
 
     public void ChangeState(GameStates newState){
         currentState = newState;
+        switch (currentState) {
+            case CHOOSE_LEVEL_SCREEN:
+                Gdx.input.setInputProcessor(myChooseLevelScreen.getStage());
+                break;
+            case MAIN_SCREEN:
+                Gdx.input.setInputProcessor(myMainScreen.getStage());
+                break;
+            case GAME_QUIT:
+                Gdx.app.exit();
+                break;
+            case LEVEL1SCREEN:
+                Gdx.input.setInputProcessor(myLevel1Screen.getStage());
+                break;
+            case PAUSE_SCREEN:
+                Gdx.input.setInputProcessor(myPauseScreen.getStage());
+                break;
+        }
     }
 
     @Override

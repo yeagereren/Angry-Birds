@@ -10,6 +10,6 @@ public abstract class BasicBird {
     }
 
     public Texture getFace(){
-        return Face;
+        return this.Face;
     }
 }

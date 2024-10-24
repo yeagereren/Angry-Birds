@@ -8,4 +8,8 @@ public class Pig {
     public Pig(){
         Face = new Texture("Birds/Piggy.png");
     }
+
+    public Texture getFace(){
+        return Face;
+    }
 }

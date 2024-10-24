@@ -3,9 +3,6 @@ package com.angrybirds.game;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
-import java.util.concurrent.locks.Lock;
 
 public class LosingScreen implements ApplicationListener {
     private Texture LosingImage;
@@ -23,7 +20,6 @@ public class LosingScreen implements ApplicationListener {
 
     @Override
     public void resize(int i, int i1) {
-
     }
 
     @Override
@@ -31,6 +27,13 @@ public class LosingScreen implements ApplicationListener {
         game.getBatch().begin();
         game.getBatch().draw(LosingImage, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         game.getBatch().end();
+        handleKeyboardInput();
+    }
+
+    private void handleKeyboardInput() {
+        if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.ESCAPE)) {
+            game.ChangeState(GameStates.LEVEL1SCREEN);
+        }
     }
 
     @Override

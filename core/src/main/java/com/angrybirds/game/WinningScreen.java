@@ -3,7 +3,6 @@ package com.angrybirds.game;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class WinningScreen implements ApplicationListener {
     private Texture WinningImage;
@@ -29,6 +28,13 @@ public class WinningScreen implements ApplicationListener {
         game.getBatch().begin();
         game.getBatch().draw(WinningImage, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         game.getBatch().end();
+        handleKeyboardInput();
+    }
+
+    private void handleKeyboardInput() {
+        if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.ESCAPE)) {
+            game.ChangeState(GameStates.LEVEL1SCREEN);
+        }
     }
 
     @Override

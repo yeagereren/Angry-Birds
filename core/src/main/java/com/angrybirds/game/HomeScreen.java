@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public class HomeScreen implements ApplicationListener {
@@ -13,10 +14,6 @@ public class HomeScreen implements ApplicationListener {
     private final Main game;
     private long startTime;
 
-//    private CustomButton playButton;
-//    private CustomButton quitButton;
-//    private Texture logo;
-
     public HomeScreen(Main game) {
         this.game = game;
         create();
@@ -24,14 +21,10 @@ public class HomeScreen implements ApplicationListener {
 
     public void create() {
         homeScreenImage = new Texture("FirstScreen.jpg");
-//        logo = new Texture("Logo.jpg");
         startTime = TimeUtils.nanoTime();
 
         ScreenHeight = Gdx.graphics.getHeight();
         ScreenWidth = Gdx.graphics.getWidth();
-
-//        playButton = new CustomButton("PlayButton.png", ScreenWidth - 750, ScreenHeight - 700, 150, 75);
-//        quitButton = new CustomButton("ExitButton.png", ScreenWidth - 500, ScreenHeight - 700, 150, 75);
     }
 
     @Override
@@ -43,31 +36,10 @@ public class HomeScreen implements ApplicationListener {
     public void render() {
         game.getBatch().begin();
         game.getBatch().draw(homeScreenImage, 0, 0, ScreenWidth, ScreenHeight);
-//        batch.draw(logo, ((float) ScreenWidth / 2) - 150, ScreenHeight - 200, 350, 175);
-
-//        playButton.draw(batch);
-//        quitButton.draw(batch);
-
-//        handleInput();
         handleAutoTransition();
 
         game.getBatch().end();
     }
-
-//    private void handleInput() {
-//        if (Gdx.input.justTouched()) {
-//            float touchX = Gdx.input.getX();
-//            float touchY = Gdx.graphics.getHeight() - Gdx.input.getY();
-//
-//            if (playButton.isClicked(touchX, touchY)) {
-//                game.ChangeState(GameStates.LEVEL_SCREEN);
-//            }
-//
-//            if (quitButton.isClicked(touchX, touchY)) {
-//                game.ChangeState(GameStates.GAME_QUIT);
-//            }
-//        }
-//    }
 
     @Override
     public void pause() {}
@@ -77,11 +49,7 @@ public class HomeScreen implements ApplicationListener {
 
     public void dispose() {
         homeScreenImage.dispose();
-//        playButton.dispose();
-//        quitButton.dispose();
-//        logo.dispose();
     }
-
 
     private void handleAutoTransition() {
         float elapsedTime = (TimeUtils.nanoTime() - startTime) / 1000000000.0f;  // Convert nanoseconds to seconds
