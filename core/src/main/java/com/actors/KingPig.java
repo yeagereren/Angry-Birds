@@ -3,7 +3,8 @@ package com.actors;
 import com.badlogic.gdx.graphics.Texture;
 
 public class KingPig extends Pig{
-    public KingPig(){
-        Face = new Texture("Birds/Foreman_Pig.png");
+    public KingPig(int posX, int posY, int width, int height){
+        super(posX, posY, width, height);
+        Face = new Texture("Birds/KingPig.png");
     }
 }

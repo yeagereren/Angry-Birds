@@ -2,14 +2,10 @@ package com.actors;
 
 import com.badlogic.gdx.graphics.Texture;
 
-public class Pig {
-    protected Texture Face;
+public class Pig extends Beings{
 
-    public Pig(){
+    public Pig(int posX, int posY, int width, int height){
+        super(posX, posY, width, height);
         Face = new Texture("Birds/Piggy.png");
-    }
-
-    public Texture getFace(){
-        return Face;
     }
 }

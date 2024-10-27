@@ -6,16 +6,16 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class MainScreen implements ApplicationListener {
-    private Texture homeScreenImage;
-    private int ScreenWidth;
-    private int ScreenHeight;
+    private Texture backgroundTexture;
+    private Texture logoTexture;
     private final Main game;
-    private CustomButton ExitButton, LoadSavedGame, NewGame;
-    private Texture logo;
+    private CustomButton backButton, loadSavedGame, newGame;
     private Stage stage;
 
     public MainScreen(Main game) {
@@ -26,51 +26,72 @@ public class MainScreen implements ApplicationListener {
     public void create() {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-        homeScreenImage = new Texture("FirstScreenBlurred.jpg");
-        LoadSavedGame = new CustomButton("LoadGame.png", 600, 60, 200, 80);
-        NewGame = new CustomButton("NewGame.png", 300, 60, 200, 80);
-        ExitButton = new CustomButton("GoBack.png", 70, 650, 60);
-        logo = new Texture("Logo.jpg");
 
-        ExitButton.addListener(new ChangeListener() {
+        backgroundTexture = new Texture("FirstScreenBlurred.jpg");
+        logoTexture = new Texture("Logo.jpg");
+
+        loadSavedGame = new CustomButton("LoadGame.png", 300, 120);
+        newGame = new CustomButton("NewGame.png", 300, 120);
+        backButton = new CustomButton("GoBack.png", 90); // Adjust the size as needed
+
+        backButton.addListener(new ChangeListener() {
             @Override
-            public void changed(ChangeEvent changeEvent, Actor actor) {
+            public void changed(ChangeEvent event, Actor actor) {
                 game.ChangeState(GameStates.GAME_QUIT);
             }
         });
-        LoadSavedGame.addListener(new ChangeListener() {
+        loadSavedGame.addListener(new ChangeListener() {
             @Override
-            public void changed(ChangeEvent changeEvent, Actor actor) {
+            public void changed(ChangeEvent event, Actor actor) {
                 game.ChangeState(GameStates.CHOOSE_LEVEL_SCREEN);
             }
         });
-        NewGame.addListener(new ChangeListener() {
+        newGame.addListener(new ChangeListener() {
             @Override
-            public void changed(ChangeEvent changeEvent, Actor actor) {
+            public void changed(ChangeEvent event, Actor actor) {
                 game.ChangeState(GameStates.CHOOSE_LEVEL_SCREEN);
             }
         });
-        stage.addActor(LoadSavedGame);
-        stage.addActor(NewGame);
-        stage.addActor(ExitButton);
-        ScreenHeight = Gdx.graphics.getHeight();
-        ScreenWidth = Gdx.graphics.getWidth();
+
+        Image backgroundImage = new Image(backgroundTexture);
+        backgroundImage.setFillParent(true);
+
+        Image logoImage = new Image(logoTexture);
+
+        Table mainTable = new Table();
+        mainTable.setFillParent(true);
+
+        mainTable.padTop(100);
+        mainTable.row();
+        for(int i=0; i<10; i++){
+            mainTable.row();
+        }
+        mainTable.add(newGame).width(newGame.getWidth()).height(newGame.getHeight()).pad(50).padTop(700);
+        mainTable.add(loadSavedGame).width(loadSavedGame.getWidth()).height(loadSavedGame.getHeight()).pad(50).padTop(700);
+
+        Table backButtonTable = new Table();
+        backButtonTable.setFillParent(true);
+        backButtonTable.top().left();
+        backButtonTable.add(backButton).pad(10);
+
+        stage.addActor(backgroundImage);
+        stage.addActor(mainTable);
+        stage.addActor(backButtonTable);
+    }
+
+    public Stage getStage() {
+        return stage;
     }
 
     @Override
     public void resize(int width, int height) {
-        this.ScreenWidth = width;
-        this.ScreenHeight = height;
+        stage.getViewport().update(width, height, true);
     }
 
+    @Override
     public void render() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
-        game.getBatch().begin();
-        game.getBatch().draw(homeScreenImage, 0, 0, ScreenWidth, ScreenHeight);
-        game.getBatch().draw(logo, ((float) ScreenWidth / 4)-50 , ScreenHeight - 350, 700, 200);
-
-        game.getBatch().end();
         stage.draw();
     }
 
@@ -80,15 +101,12 @@ public class MainScreen implements ApplicationListener {
     @Override
     public void resume() {}
 
-    public Stage getStage(){
-        return stage;
-    }
-
     public void dispose() {
-        homeScreenImage.dispose();
-        ExitButton.dispose();
-        LoadSavedGame.dispose();
-        NewGame.dispose();
+        backgroundTexture.dispose();
+        logoTexture.dispose();
+        backButton.dispose();
+        loadSavedGame.dispose();
+        newGame.dispose();
         stage.dispose();
     }
 }

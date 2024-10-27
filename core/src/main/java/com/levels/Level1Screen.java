@@ -9,20 +9,25 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.structure.Wood;
+import com.structure.*;
 
 public class Level1Screen implements ApplicationListener {
-    private Texture Background, RockLeft, RockRight, Slingshot, Ground, Circle;
+    private Texture Slingshot;
+    private Image Background;
     private final Main game;
     private RedBird redBird;
     private Chuck chuck;
     private Bomb bomb;
     private Pig pig;
     private KingPig kingPig;
+    private ForemanPig foremanPig;
     private CustomButton PauseButton;
     private Stage stage;
+    int ScreenWidth, ScreenHeight;
 
     public Level1Screen(Main game){
         this.game = game;
@@ -31,29 +36,82 @@ public class Level1Screen implements ApplicationListener {
 
     @Override
     public void create() {
+        ScreenHeight = Gdx.graphics.getHeight();
+        ScreenWidth = Gdx.graphics.getWidth();
+        pig = new Pig(1500, 453, 100, 100);
+        kingPig = new KingPig(1500, 670, 100, 120);
+        foremanPig = new ForemanPig(1470, 140, 150, 150);
+
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-        Background = new Texture("1Assets/Waterfall.jpg");
-        RockRight = new Texture("1Assets/Rock5.png");
-        RockLeft = new Texture("1Assets/Rock4.png");
+
+        Image background = new Image(new Texture("1Assets/Waterfall.jpg"));
+        background.setFillParent(true);
+
         Slingshot = new Texture("1Assets/Slingshot.png");
-        PauseButton = new CustomButton("1Assets/Pause.png", 1000, 650, 60);
-        Ground = new Texture("1Assets/Ground.png");
-        Circle = new Texture("Circle.png");
-        new Wood();
-        pig = new Pig();
-        kingPig = new KingPig();
-        redBird = new RedBird();
-        chuck = new Chuck();
-        bomb = new Bomb();
+        PauseButton = new CustomButton("1Assets/Pause.png", 90);
+        CustomButton circle1 = new CustomButton("Circle.png", 70);
+        CustomButton circle2 = new CustomButton("Circle.png", 70);
+        CustomButton Circle3 = new CustomButton("Circle.png", 70);
+        redBird = new RedBird(905, 910, 95, 95);
+        chuck = new Chuck(710, 910, 90, 95);
+        bomb = new Bomb(1115, 910, 80, 95);
+
+        Table mainTable = new Table();
+        mainTable.setFillParent(true);
+
+        mainTable.top();
+        mainTable.add(circle1).width(circle1.getWidth()).height(circle1.getHeight()).padTop(70).pad(30);
+        mainTable.add(circle2).width(circle2.getWidth()).height(circle2.getHeight()).padTop(70).pad(30);
+        mainTable.add(Circle3).width(Circle3.getWidth()).height(Circle3.getHeight()).padTop(70).pad(30);
+
         PauseButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 game.ChangeState(GameStates.PAUSE_SCREEN);
             }
         });
-        stage.addActor(PauseButton);
+
+        Table ButtonTable = new Table();
+        ButtonTable.setFillParent(true);
+        ButtonTable.top().right();
+        ButtonTable.add(PauseButton).pad(10);
+
+        stage.addActor(background);
+        stage.addActor(mainTable);
+        stage.addActor(ButtonTable);
     }
+
+    private void PrepareBuilding(){
+        Stone stone;
+        stone = new Stone(1350,120,91,253);
+        stone.render(game.getBatch());
+        stone = new Stone(1650, 120, 91, 253);
+        stone.render(game.getBatch());
+        stone = new Stone(1350,373,391,91);
+        stone.render(game.getBatch());
+
+        Wood wood;
+        wood = new Wood(1450,464,43,82);
+        wood.render(game.getBatch());
+        wood = new Wood(1450,546,43,82);
+        wood.render(game.getBatch());
+        wood = new Wood(1600,464,43,82);
+        wood.render(game.getBatch());
+        wood = new Wood(1600,546,43,82);
+        wood.render(game.getBatch());
+
+        Glass glass;
+        glass = new Glass(1450,628,200,50);
+        glass.render(game.getBatch());
+    }
+
+    private void PreparePigs(){
+        pig.render(game.getBatch());
+        kingPig.render(game.getBatch());
+        foremanPig.render(game.getBatch());
+    }
+
 
     @Override
     public void resize(int i, int i1) {}
@@ -61,24 +119,15 @@ public class Level1Screen implements ApplicationListener {
     @Override
     public void render() {
         stage.act(Gdx.graphics.getDeltaTime());
-        game.getBatch().begin();
-        game.getBatch().draw(Background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        game.getBatch().draw(Ground, 0, -20, Gdx.graphics.getWidth()+120, (float) Gdx.graphics.getHeight()-50);
-        game.getBatch().draw(Slingshot, 50, 100, 170, 210);
-        game.getBatch().draw(Circle, 380, 600, 95, 100);
-        game.getBatch().draw(Circle, 500, 600, 95, 100);
-        game.getBatch().draw(Circle, 620, 600, 95, 100);
-        game.getBatch().draw(chuck.getFace(), 395, 615, 60, 70);
-        game.getBatch().draw(bomb.getFace(), 515, 615, 60, 75);
-        game.getBatch().draw(redBird.getFace(), 630, 615, 65, 65);
-        game.getBatch().draw(Wood.getThreeLeg(), 800, 100, 200, 200);
-        game.getBatch().draw(Wood.getOneLeg(), 630, 100, 200, 200);
-        game.getBatch().draw(Wood.getTwoLeg(), 730, 282, 250, 250);
-        game.getBatch().draw(pig.getFace(), 872, 195, 65, 65);
-        game.getBatch().draw(pig.getFace(), 690, 195, 65, 65);
-        game.getBatch().draw(kingPig.getFace(), 805, 402, 80,80);
-        game.getBatch().end();
         stage.draw();
+        game.getBatch().begin();
+        game.getBatch().draw(Slingshot, 100, 100, 250, 320);
+        chuck.render(game.getBatch());
+        redBird.render(game.getBatch());
+        bomb.render(game.getBatch());
+        PrepareBuilding();
+        PreparePigs();
+        game.getBatch().end();
         handleKeyboardInput();
     }
 
@@ -106,17 +155,19 @@ public class Level1Screen implements ApplicationListener {
 
     }
 
-    public Stage getStage(){
+    public Stage getStage() {
         return stage;
     }
 
     @Override
     public void dispose() {
-        Background.dispose();
-        RockLeft.dispose();
-        RockRight.dispose();
         Slingshot.dispose();
         redBird.dispose();
+        chuck.dispose();
+        bomb.dispose();
+        pig.dispose();
+        kingPig.dispose();
+        foremanPig.dispose();
         PauseButton.dispose();
         stage.dispose();
     }

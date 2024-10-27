@@ -1,25 +1,33 @@
 package com.angrybirds.game;
 
 import com.actors.*;
+import com.angrybirds.game.CustomButton;
+import com.angrybirds.game.GameStates;
+import com.angrybirds.game.Main;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.structure.Wood;
+import com.structure.*;
 
 public class PauseLevelScreen implements ApplicationListener {
-    private Texture Background, RockLeft, RockRight, Slingshot, Ground, PausedText, Circle;
+    private Texture Slingshot;
+    private Image Background;
     private final Main game;
     private RedBird redBird;
     private Chuck chuck;
     private Bomb bomb;
-    private CustomButton ResumeButton, GoBackButton;
     private Pig pig;
     private KingPig kingPig;
+    private ForemanPig foremanPig;
+    private CustomButton ResumeButton, BackButton;
     private Stage stage;
+    int ScreenWidth, ScreenHeight;
 
     public PauseLevelScreen(Main game){
         this.game = game;
@@ -28,25 +36,38 @@ public class PauseLevelScreen implements ApplicationListener {
 
     @Override
     public void create() {
+        ScreenHeight = Gdx.graphics.getHeight();
+        ScreenWidth = Gdx.graphics.getWidth();
+        pig = new Pig(1500, 453, 100, 100);
+        kingPig = new KingPig(1500, 670, 100, 120);
+        foremanPig = new ForemanPig(1470, 140, 150, 150);
+
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-        Background = new Texture("1Assets/Waterfall.jpg");
-        RockRight = new Texture("1Assets/Rock5.png");
-        RockLeft = new Texture("1Assets/Rock4.png");
-        PausedText = new Texture("Pause.png");
+
+        Image background = new Image(new Texture("1Assets/Waterfall.jpg"));
+        background.setFillParent(true);
+
         Slingshot = new Texture("1Assets/Slingshot.png");
-        ResumeButton = new CustomButton("1Assets/Resume.png", 1005, 648, 55);
-        GoBackButton = new CustomButton("GoBack.png", 70, 650, 60);
-        Ground = new Texture("1Assets/Ground.png");
-        Circle = new Texture("Circle.png");
-        pig = new Pig();
-        kingPig = new KingPig();
-        redBird = new RedBird();
-        chuck = new Chuck();
-        bomb = new Bomb();
-        redBird = new RedBird();
-        chuck = new Chuck();
-        bomb = new Bomb();
+        Image paused = new Image(new Texture("Pause.png"));
+
+        ResumeButton = new CustomButton("1Assets/Resume.png", 82);
+        BackButton = new CustomButton("GoBack.png", 90);
+
+        CustomButton circle1 = new CustomButton("Circle.png", 70);
+        CustomButton circle2 = new CustomButton("Circle.png", 70);
+        CustomButton Circle3 = new CustomButton("Circle.png", 70);
+        redBird = new RedBird(905, 910, 95, 95);
+        chuck = new Chuck(710, 910, 90, 95);
+        bomb = new Bomb(1115, 910, 80, 95);
+
+        Table mainTable = new Table();
+        mainTable.setFillParent(true);
+
+        mainTable.top();
+        mainTable.add(circle1).width(circle1.getWidth()).height(circle1.getHeight()).padTop(70).pad(30);
+        mainTable.add(circle2).width(circle2.getWidth()).height(circle2.getHeight()).padTop(70).pad(30);
+        mainTable.add(Circle3).width(Circle3.getWidth()).height(Circle3.getHeight()).padTop(70).pad(30);
 
         ResumeButton.addListener(new ChangeListener() {
             @Override
@@ -54,15 +75,65 @@ public class PauseLevelScreen implements ApplicationListener {
                 game.ChangeState(GameStates.LEVEL1SCREEN);
             }
         });
-        GoBackButton.addListener(new ChangeListener() {
+
+        BackButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 game.ChangeState(GameStates.CHOOSE_LEVEL_SCREEN);
             }
         });
-        stage.addActor(GoBackButton);
-        stage.addActor(ResumeButton);
+
+        Table PauseTable = new Table();
+        PauseTable.setFillParent(true);
+        PauseTable.add(paused).width(paused.getWidth()).height(paused.getHeight()).expandX();
+
+        Table ButtonTable = new Table();
+        ButtonTable.setFillParent(true);
+        ButtonTable.top().right();
+        ButtonTable.add(ResumeButton).pad(12).padTop(20);
+
+        Table backButtonTable = new Table();
+        backButtonTable.setFillParent(true);
+        backButtonTable.top().left();
+        backButtonTable.add(BackButton).pad(10);
+
+        stage.addActor(background);
+        stage.addActor(mainTable);
+        stage.addActor(ButtonTable);
+        stage.addActor(backButtonTable);
+        stage.addActor(PauseTable);
     }
+
+    private void PrepareBuilding(){
+        Stone stone;
+        stone = new Stone(1350,120,91,253);
+        stone.render(game.getBatch());
+        stone = new Stone(1650, 120, 91, 253);
+        stone.render(game.getBatch());
+        stone = new Stone(1350,373,391,91);
+        stone.render(game.getBatch());
+
+        Wood wood;
+        wood = new Wood(1450,464,43,82);
+        wood.render(game.getBatch());
+        wood = new Wood(1450,546,43,82);
+        wood.render(game.getBatch());
+        wood = new Wood(1600,464,43,82);
+        wood.render(game.getBatch());
+        wood = new Wood(1600,546,43,82);
+        wood.render(game.getBatch());
+
+        Glass glass;
+        glass = new Glass(1450,628,200,50);
+        glass.render(game.getBatch());
+    }
+
+    private void PreparePigs(){
+        pig.render(game.getBatch());
+        kingPig.render(game.getBatch());
+        foremanPig.render(game.getBatch());
+    }
+
 
     @Override
     public void resize(int i, int i1) {}
@@ -70,31 +141,29 @@ public class PauseLevelScreen implements ApplicationListener {
     @Override
     public void render() {
         stage.act(Gdx.graphics.getDeltaTime());
-        game.getBatch().begin();
-        game.getBatch().draw(Background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        game.getBatch().draw(Ground, 0, -20, Gdx.graphics.getWidth()+120, (float) Gdx.graphics.getHeight()-50);
-        game.getBatch().draw(Slingshot, 50, 100, 170, 210);
-        game.getBatch().draw(PausedText, 300, 350, 450, 130);
-        game.getBatch().draw(Circle, 380, 600, 95, 100);
-        game.getBatch().draw(Circle, 500, 600, 95, 100);
-        game.getBatch().draw(Circle, 620, 600, 95, 100);
-        game.getBatch().draw(chuck.getFace(), 395, 615, 60, 70);
-        game.getBatch().draw(bomb.getFace(), 515, 615, 60, 75);
-        game.getBatch().draw(redBird.getFace(), 630, 615, 65, 65);
-        game.getBatch().draw(Wood.getThreeLeg(), 800, 100, 200, 200);
-        game.getBatch().draw(Wood.getOneLeg(), 630, 100, 200, 200);
-        game.getBatch().draw(Wood.getTwoLeg(), 730, 282, 250, 250);
-        game.getBatch().draw(pig.getFace(), 872, 195, 65, 65);
-        game.getBatch().draw(pig.getFace(), 690, 195, 65, 65);
-        game.getBatch().draw(kingPig.getFace(), 805, 402, 80,80);
         stage.draw();
+        game.getBatch().begin();
+        game.getBatch().draw(Slingshot, 100, 100, 250, 320);
+        chuck.render(game.getBatch());
+        redBird.render(game.getBatch());
+        bomb.render(game.getBatch());
+        PrepareBuilding();
+        PreparePigs();
         game.getBatch().end();
         handleKeyboardInput();
     }
 
     private void handleKeyboardInput() {
         if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.ESCAPE)) {
-            game.ChangeState(GameStates.LEVEL1SCREEN);
+            game.ChangeState(GameStates.PAUSE_SCREEN);
+        }
+
+        if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.W)) {
+            game.ChangeState(GameStates.WINNING_SCREEN);
+        }
+
+        if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.L)) {
+            game.ChangeState(GameStates.LOSING_SCREEN);
         }
     }
 
@@ -108,19 +177,21 @@ public class PauseLevelScreen implements ApplicationListener {
 
     }
 
-    public Stage getStage(){
+    public Stage getStage() {
         return stage;
     }
 
     @Override
     public void dispose() {
-        Background.dispose();
-        RockLeft.dispose();
-        RockRight.dispose();
         Slingshot.dispose();
         redBird.dispose();
+        chuck.dispose();
+        bomb.dispose();
+        pig.dispose();
+        kingPig.dispose();
+        foremanPig.dispose();
         ResumeButton.dispose();
-        GoBackButton.dispose();
+        BackButton.dispose();
         stage.dispose();
     }
 }

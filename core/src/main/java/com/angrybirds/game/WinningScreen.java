@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class WinningScreen implements ApplicationListener {
     private Texture WinningImage;
+    private Texture NextOption;
     private final Main game;
 
     WinningScreen(Main game){
@@ -16,6 +17,7 @@ public class WinningScreen implements ApplicationListener {
     @Override
     public void create() {
         WinningImage = new Texture("WinningScreen.jpg");
+        NextOption = new Texture("Replay.png");
     }
 
     @Override
@@ -27,6 +29,7 @@ public class WinningScreen implements ApplicationListener {
     public void render() {
         game.getBatch().begin();
         game.getBatch().draw(WinningImage, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        game.getBatch().draw(NextOption, 750, 5, 520, 250);
         game.getBatch().end();
         handleKeyboardInput();
     }

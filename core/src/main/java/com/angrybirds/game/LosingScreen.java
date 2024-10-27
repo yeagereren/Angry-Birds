@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
 public class LosingScreen implements ApplicationListener {
-    private Texture LosingImage;
+    private Texture LosingImage, RetryButton;
     private Main game;
 
     LosingScreen(Main game){
@@ -16,6 +16,7 @@ public class LosingScreen implements ApplicationListener {
     @Override
     public void create() {
         LosingImage = new Texture("LosingImage.jpg");
+        RetryButton = new Texture("Retry.png");
     }
 
     @Override
@@ -26,6 +27,7 @@ public class LosingScreen implements ApplicationListener {
     public void render() {
         game.getBatch().begin();
         game.getBatch().draw(LosingImage, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        game.getBatch().draw(RetryButton, 460, 7, 1000, 200);
         game.getBatch().end();
         handleKeyboardInput();
     }
